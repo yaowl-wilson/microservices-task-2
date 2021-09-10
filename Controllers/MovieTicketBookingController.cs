@@ -98,7 +98,7 @@ namespace MovieTicketBookingAPI.Controllers
             foreach (var item in movieTicketBooking.Where(w => w.Currency != "sgd"))
             {
                 var value = await CurrencyConverterBasedOnSGD(item.Currency);
-                item.Amount = item.Amount / value;
+                item.Amount = item.Amount * value;
             }
 
             return movieTicketBooking;
@@ -146,7 +146,7 @@ namespace MovieTicketBookingAPI.Controllers
                 if (local != null)
                 {
                     var value = await CurrencyConverterBasedOnSGD(movieTicketBooking.Currency);
-                    local.Amount = local.Amount / value;
+                    local.Amount = local.Amount * value;
 
                     // detach
                     _context.Entry(local).State = EntityState.Detached;
@@ -177,7 +177,7 @@ namespace MovieTicketBookingAPI.Controllers
         public async Task<ActionResult<MovieTicketBooking>> PostMovieTicketBooking(MovieTicketBooking movieTicketBooking)
         {
             var value = await CurrencyConverterBasedOnSGD(movieTicketBooking.Currency);
-            movieTicketBooking.Amount = movieTicketBooking.Amount / value;
+            movieTicketBooking.Amount = movieTicketBooking.Amount * value;
 
             _context.MovieTicketBookingItems.Add(movieTicketBooking);
             await _context.SaveChangesAsync();
